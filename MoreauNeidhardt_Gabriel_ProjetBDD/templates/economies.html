@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECO-Gestion | Comparaison des Économies</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='images/background.jpg') }}");
+            background-size: cover;
+            background-attachment: fixed;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .content-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 50px auto;
+            max-width: 900px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2e7d32;
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .chart-container {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        canvas {
+            max-width: 700px;
+            height: 400px !important;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container content-container">
+        
+
+        <form method="GET" action="{{ url_for('view_economies', logement_id=logement_id) }}">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label for="startPeriod1" class="form-label">Début de la 1ère période :</label>
+                    <input type="month" id="startPeriod1" name="startPeriod1" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="endPeriod1" class="form-label">Fin de la 1ère période :</label>
+                    <input type="month" id="endPeriod1" name="endPeriod1" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label for="startPeriod2" class="form-label">Début de la 2ème période :</label>
+                    <input type="month" id="startPeriod2" name="startPeriod2" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="endPeriod2" class="form-label">Fin de la 2ème période :</label>
+                    <input type="month" id="endPeriod2" name="endPeriod2" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-success">Comparer</button>
+            </div>
+        </form>
+
+        <div class="chart-container">
+            <canvas id="economiesChart"></canvas>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('logement_details', logement_id=logement_id) }}" class="btn btn-secondary">Retour</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('economiesChart').getContext('2d');
+        const economiesData = {{ economies | tojson }};
+        
+        const labels = ['Périodes']; 
+        const dataset1 = [economiesData.period1_total]; 
+        const dataset2 = [economiesData.period2_total]; 
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: '1ère période',
+                        data: dataset1,
+                        backgroundColor: 'rgba(102, 187, 106, 0.8)', 
+                        borderColor: '#66bb6a',
+                        borderWidth: 1,
+                        barPercentage: 1.3, 
+                        categoryPercentage: 0.2 
+                    },
+                    {
+                        label: '2ème période',
+                        data: dataset2,
+                        backgroundColor: 'rgba(102, 187, 106, 0.4)', 
+                        borderColor: '#66bb6a',
+                        borderWidth: 1,
+                        barPercentage: 2.6, 
+                        categoryPercentage: 0.1, 
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: false,
+                        title: {
+                            display: true,
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Montant Total (€)'
+                        }
+                    }
+                },
+                animation: {
+                    duration: 0,
+                },
+            },
+        });
+    </script>
+</body>
+</html>
+
+
+

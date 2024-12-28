@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}ECO-Gestion | Prévisions Météo{% endblock %}
+
+{% block content %}
+<style>
+    .meteo-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #2e7d32;
+        text-align: center;
+        margin: 50px auto;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: rgba(255, 255, 255, 0.8);
+        max-width: 900px;
+    }
+
+    .meteo-container form {
+        margin-bottom: 30px;
+    }
+
+    .meteo-container .input-group {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .city-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .city-header img {
+        height: 30px; 
+    }
+
+    .row {
+        display: flex;
+        justify-content: center; 
+        gap: 20px; 
+        margin-top: 20px;
+    }
+
+    .card {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        padding: 10px;
+        border-radius: 10px;
+        overflow: hidden;
+        width: 150px;
+    }
+
+    .card-body h5 {
+        font-size: 1rem;
+        font-weight: bold;
+        white-space: nowrap; 
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 30px; 
+    }
+
+    .weather-icon {
+        display: block;
+        margin: 0 auto; 
+        width: 60px; 
+        height: auto; 
+        margin-top: 20px;
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="meteo-container">
+    <form method="GET" action="{{ url_for('meteo') }}">
+        <div class="input-group">
+            <input type="text" name="city" placeholder="Entrez une ville en France" class="form-control" required>
+            <button type="submit" class="btn btn-success">Voir la météo</button>
+        </div>
+    </form>
+
+    {% if weather %}
+    <div class="city-header">
+        <img src="{{ url_for('static', filename='images/lieu.png') }}" alt="Lieu">
+        <span>{{ city.capitalize() }}</span>
+    </div>
+    <div class="row">
+        {% for day in weather %}
+        <div class="card">
+            <h5>{{ day.date }}</h5>
+            <img src="{{ url_for('static', filename='icons/' ~ day.icon) }}" alt="Icone météo" class="weather-icon">
+            <p>{{ day.temp }}°C</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+
+
+

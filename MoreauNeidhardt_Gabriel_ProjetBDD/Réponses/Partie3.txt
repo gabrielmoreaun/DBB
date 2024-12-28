@@ -1,0 +1,11 @@
+3 HTML/CSS/Javascript
+
+Cette partie à été réalisé sur le fichier app.py. L'ensemble des page html se trouvent dans le fichier templates.
+
+1. La consommation des logement se trouve sur la page : factures.html.
+
+2. L'état des différents capteurs/actionneurs se trouve sur la page : capteurs.html.
+
+3. Les économies peuvent être visualisées sur la page : economies.html.
+
+4. la configuration des logements se divise sur plusieurs pages : add_capteur.html / delete_capteur.html / add_piece.html / delete_piece.html / create_logement.html / info_logement.html

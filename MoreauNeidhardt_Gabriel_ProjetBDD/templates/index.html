@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}ECO-Gestion | Liste des Logements{% endblock %}
+
+{% block content %}
+<style>
+    .background-container {
+        background-color: rgba(255, 255, 255, 0.8); 
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+        margin: 30px auto;
+        max-width: 1200px; 
+    }
+
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px; 
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .card {
+        width: 200px; 
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.8);
+        overflow: hidden;
+        position: relative;
+    }
+
+    .card img {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        height: 100px; 
+        width: 100%;
+        object-fit: contain;
+        background-color: white;
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .card img.zoom-active {
+        transform: scale(1.2); 
+    }
+
+    .card-body {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.9);
+    }
+
+    .card-title {
+        font-size: 1rem; 
+        font-weight: bold;
+        margin: 8px 0;
+        text-decoration: none; 
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 128, 0, 0.4);
+    }
+
+    .btn-green {
+        background-color: #66bb6a;
+        color: white;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-green:hover {
+        background-color: #338a3e;
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 128, 0, 0.4);
+    }
+</style>
+
+<div class="container mt-4">
+    
+    <div class="background-container">
+        <div class="card-container">
+            {% for logement in logements %}
+            <a href="{{ url_for('logement_details', logement_id=logement.id_Logement) }}" class="card" style="text-decoration: none;">
+                <img src="{{ url_for('static', filename='images/house_idle.gif') }}"
+                     onmouseover="this.src='{{ url_for('static', filename='images/house_active.gif') }}'; this.classList.add('zoom-active');"
+                     onmouseout="this.src='{{ url_for('static', filename='images/house_idle.gif') }}'; this.classList.remove('zoom-active');"
+                     alt="Maison">
+                <div class="card-body">
+                    <h5 class="card-title">{{ logement.ADRESSE }}</h5>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('create_logement') }}" class="btn btn-green">Créer un Nouveau Logement</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

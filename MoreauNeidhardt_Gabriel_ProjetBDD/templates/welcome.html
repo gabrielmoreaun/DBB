@@ -1,0 +1,51 @@
+
+
+
+{% extends "base.html" %}
+
+{% block title %}ECO-Gestion | Accueil{% endblock %}
+
+{% block content %}
+<style>
+    .welcome-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #2e7d32;
+        text-align: center;
+        margin: 100px auto;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        background-color: rgba(255, 255, 255, 0.8);
+        max-width: 800px;
+        height: 300px;
+    }
+    .welcome-container h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+    .welcome-container hr {
+        width: 80px;
+        height: 4px;
+        background-color: #2e7d32;
+        border: none;
+        margin: 10px auto;
+    }
+    .welcome-container p {
+        font-size: 1.2rem;
+        max-width: 600px;
+    }
+</style>
+
+<div class="welcome-container">
+    <h1>Bienvenue</h1>
+    <hr>
+    <p>
+        Découvrez des solutions innovantes pour une gestion écoresponsable de vos logements.<br>
+        Ensemble, réduisons notre empreinte écologique tout en optimisant votre confort et vos économies.
+    </p>
+</div>
+{% endblock %}

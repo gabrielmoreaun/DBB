@@ -1,0 +1,24 @@
+2 Serveur RESTful
+
+L'ensemble de réponse à la partie 2 se trouvent dans le fichier serveurRESTful.py.
+
+2.1 Exercice 1 : remplissage de la base de données
+
+Les routes telles que /logements ou /pieces/<int:piece_id>/capteurs permettent de récupérer des données sous forme JSON. Par exemple, la route /logements retourne une liste des logements stockés dans la table Logement, et /pieces/<int:piece_id>/capteurs retourne les capteurs associés à une pièce spécifique.
+Les routes comme /logements et /capteurs/<int:capteur_id>/mesures permettent d'ajouter des données dans la base de données. Par exemple :
+Ajouter un logement avec ses détails (adresse, numéro de téléphone, etc.) dans la table Logement.
+Ajouter une mesure avec sa valeur associée à un capteur particulier dans la table Mesure. Les données sont extraites des requêtes JSON envoyées par le client, validées, puis insérées dans la base de données via des requêtes SQL.
+
+2.2 Exercice 2 : serveur web
+
+La route /factures/chart récupère les montants totaux des factures groupés par leur type à l'aide d'une requête SQL. Ces données sont ensuite structurées sous forme de tableau compatible avec Google Charts.
+Une page HTML contenant un graphique en camembert est générée à la volée. Le graphique utilise l'API Google Charts pour afficher la répartition des montants des factures par type. Les données sont injectées directement dans le script JavaScript de la page sous forme JSON.
+Le graphique est rendu interactif et est présenté dans un conteneur HTML <div> avec des dimensions définies. Cela permet de visualiser la proportion des différents types de factures de manière claire et esthétique.
+
+2.3 Exercice 3 : météo
+
+La fonction charger_meteo envoie une requête à l'API OpenWeatherMap avec la clé API et les paramètres nécessaires, tels que le nom de la ville (Paris) et l'unité de température (metric). Les prévisions sont récupérées pour 5 jours avec des intervalles de 3 heures. Les données brutes sont filtrées pour ne conserver qu'une prévision par jour (celle de 12h00). Cela permet d'alléger l'information affichée et de rendre les prévisions plus lisibles. Les prévisions traitées sont stockées dans la variable cache_meteo, permettant d'accélérer les requêtes ultérieures sans devoir interroger l'API à chaque fois. La route /meteo retourne les prévisions stockées dans le cache au format JSON. Une autre route (/admin/recharger_meteo) permet de rafraîchir manuellement les données en interrogeant à nouveau l'API.
+
+2.4 Exercice 4 : intégration
+
+Cette partie n'a pas été réalisé dans le code serveurRESTful.py. La gestion des capteur est disponible dans le code app.py.

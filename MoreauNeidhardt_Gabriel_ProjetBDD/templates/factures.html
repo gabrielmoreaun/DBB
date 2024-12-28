@@ -1,0 +1,238 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECO-Gestion | Factures</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='images/background.jpg') }}");
+            background-size: cover;
+            background-attachment: fixed;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .content-container {
+            background-color: rgba(255, 255, 255, 0.8); 
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 50px auto;
+            max-width: 800px; 
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; 
+            gap: 20px;
+            align-items: start;
+        }
+
+        .facture-table {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .facture-table .table-container {
+            max-height: 300px; 
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .facture-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .facture-table th {
+            background-color: #66bb6a;
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            padding: 10px;
+        }
+
+        .facture-table th, .facture-table td {
+            text-align: left;
+            padding: 10px;
+        }
+
+        .facture-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .chart-container {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .chart-container canvas {
+            max-width: 250px;
+            margin: auto;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+        }
+
+        .header-title {
+            text-align: center;
+            color: #2e7d32;
+            margin-bottom: 30px;
+        }
+
+        .filter-container {
+            margin-bottom: 20px;
+        }
+
+        .filter-container label {
+            font-weight: bold;
+            color: #2e7d32;
+        }
+    </style>
+</head>
+<body>
+    <div class="container content-container">
+        <div class="main-grid">
+       
+            <div class="facture-table">
+                
+                <form method="GET" id="filterForm">
+                    
+                    <select id="typeFilter" name="type" class="form-select mb-3" onchange="document.getElementById('filterForm').submit();">
+                        <option value="all" {% if selected_type == 'all' %}selected{% endif %}>Tout</option>
+                        <option value="Gaz" {% if selected_type == 'Gaz' %}selected{% endif %}>Gaz</option>
+                        <option value="Électricité" {% if selected_type == 'Électricité' %}selected{% endif %}>Électricité</option>
+                        <option value="Eau" {% if selected_type == 'Eau' %}selected{% endif %}>Eau</option>
+                    </select>
+                </form>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Montant (€)</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% if factures and factures|length > 0 %}
+                                {% for facture in factures %}
+                                <tr>
+                                    <td>{{ facture.type }}</td>
+                                    <td>{{ facture.montant }}</td>
+                                    <td>{{ facture.date }}</td>
+                                </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td colspan="3" class="text-center">Aucune facture disponible</td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="btn-container">
+                    <a href="{{ url_for('add_facture', logement_id=logement_id) }}" class="btn btn-success">Ajouter</a>
+                    <a href="{{ url_for('delete_facture', logement_id=logement_id) }}" class="btn btn-danger">Supprimer</a>
+                </div>
+            </div>
+
+    
+            <div class="chart-container">
+           
+                <form method="GET" id="camembertFilterForm">
+                    <div class="filter-container">
+                        <div class="row">
+                            <div class="col-md-6">
+                                
+                                <select id="monthFilter" name="month" class="form-select" onchange="document.getElementById('camembertFilterForm').submit();">
+                                    <option value="all" {% if selected_month == 'all' %}selected{% endif %}>Tout</option>
+                                    <option value="01" {% if selected_month == '01' %}selected{% endif %}>Janvier</option>
+                                    <option value="02" {% if selected_month == '02' %}selected{% endif %}>Février</option>
+                                    <option value="03" {% if selected_month == '03' %}selected{% endif %}>Mars</option>
+                                    <option value="04" {% if selected_month == '04' %}selected{% endif %}>Avril</option>
+                                    <option value="05" {% if selected_month == '05' %}selected{% endif %}>Mai</option>
+                                    <option value="06" {% if selected_month == '06' %}selected{% endif %}>Juin</option>
+                                    <option value="07" {% if selected_month == '07' %}selected{% endif %}>Juillet</option>
+                                    <option value="08" {% if selected_month == '08' %}selected{% endif %}>Août</option>
+                                    <option value="09" {% if selected_month == '09' %}selected{% endif %}>Septembre</option>
+                                    <option value="10" {% if selected_month == '10' %}selected{% endif %}>Octobre</option>
+                                    <option value="11" {% if selected_month == '11' %}selected{% endif %}>Novembre</option>
+                                    <option value="12" {% if selected_month == '12' %}selected{% endif %}>Décembre</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                
+                                <select id="yearFilter" name="year" class="form-select" onchange="document.getElementById('camembertFilterForm').submit();">
+                                    <option value="all" {% if selected_year == 'all' %}selected{% endif %}>Tout</option>
+                                    {% for year in years %}
+                                    <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <canvas id="facturesChart"></canvas>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="{{ url_for('logement_details', logement_id=logement_id) }}" class="btn btn-secondary">Retour</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('facturesChart').getContext('2d');
+        const camembertData = {{ camembert_data | tojson if camembert_data and camembert_data|length > 0 else [] }};
+        const labels = camembertData.length > 0 ? camembertData.map(d => d.type) : ['Aucune donnée'];
+        const data = camembertData.length > 0 ? camembertData.map(d => d.total) : [1];
+
+        new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Montants',
+                    data: data,
+                    backgroundColor: camembertData.length > 0 ? ['#66bb6a', '#42a5f5', '#ff7043', '#ffca28', '#8e24aa'] : ['#cccccc'],
+                    borderColor: '#666666',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return camembertData.length > 0
+                                    ? `${context.label}: ${context.raw}€`
+                                    : 'Aucune donnée disponible';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+

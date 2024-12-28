@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter une Facture</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='images/background.jpg') }}");
+            background-size: cover;
+            background-attachment: fixed;
+            margin: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .content-container {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 50px auto;
+            max-width: 500px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2e7d32;
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: bold;
+            color: #2e7d32;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container content-container">
+        <h1>Ajouter une Facture</h1>
+        <form method="POST">
+            <div class="mb-3">
+                <label for="type" class="form-label">Type de Facture</label>
+                <select id="type" name="type" class="form-select" required>
+                    <option value="Gaz">Gaz</option>
+                    <option value="Électricité">Électricité</option>
+                    <option value="Eau">Eau</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="montant" class="form-label">Montant (€)</label>
+                <input type="number" id="montant" name="montant" class="form-control" step="0.01" required>
+            </div>
+            <div class="mb-3">
+                <label for="valconso" class="form-label">Valeur Consommée</label>
+                <input type="number" id="valconso" name="valconso" class="form-control" step="0.01" required>
+            </div>
+            <div class="mb-3">
+                <label for="date" class="form-label">Date de la Facture</label>
+                <input type="date" id="date" name="date" class="form-control" required>
+            </div>
+            <div class="btn-container">
+                <button type="submit" class="btn btn-success">Ajouter</button>
+                <a href="{{ url_for('view_factures', logement_id=logement_id) }}" class="btn btn-secondary">Annuler</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
